@@ -1,0 +1,337 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model conf_rechum {
+  id_rechum    String   @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  cod_empresa  String?  @db.VarChar(30)
+  nomb_empresa String?  @db.VarChar(100)
+  direccion    String?  @db.VarChar(100)
+  telefono     Decimal? @db.Decimal(10, 0)
+  provincia    String?  @db.VarChar(50)
+}
+
+model dat_condecoracion {
+  id_condecoracion String       @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  id_persona       String?      @db.VarChar(36)
+  nombre           String?      @db.VarChar(100)
+  tipo             String?      @db.VarChar(100)
+  dat_persona      dat_persona? @relation(fields: [id_persona], references: [id_persona])
+
+  @@unique([id_persona, nombre], name: "dat_condecoracion_idpersona_key")
+}
+
+model dat_persona {
+  id_persona            String                 @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  numero                Decimal?               @db.Decimal(4, 0)
+  ci                    String?                @db.VarChar(15)
+  nombre                String?                @db.VarChar(50)
+  apellido1             String?                @db.VarChar(50)
+  apellido2             String?                @db.VarChar(50)
+  fecha_nac             DateTime?              @db.Date
+  sexo                  String?                @db.VarChar(1)
+  raza                  String?                @db.VarChar(1)
+  peso                  Decimal?               @db.Decimal(4, 1)
+  estatura              Decimal?               @db.Decimal(3, 2)
+  madre                 String?                @db.VarChar(50)
+  padre                 String?                @db.VarChar(50)
+  estado_civil          String?                @db.VarChar(10)
+  talla_camisa          String?                @db.VarChar(36)
+  talla_pantalon        String?                @db.VarChar(36)
+  num_zapato            String?                @db.VarChar(36)
+  direccion             String?                @db.VarChar(100)
+  provincia             String?                @db.VarChar(36)
+  municipio             String?                @db.VarChar(36)
+  reparto               String?                @db.VarChar(36)
+  telefono              String?                @db.VarChar(20)
+  correo_electronico    String?                @db.VarChar(100)
+  militar               String?                @db.VarChar(2)
+  fecha_ing_far         DateTime?              @db.Date
+  id_grado_militar      String?                @db.VarChar(36)
+  id_cargo_militar      String?                @db.VarChar(36)
+  id_especialidad       String?                @db.VarChar(36)
+  pcc                   String?                @db.VarChar(2)
+  ujc                   String?                @db.VarChar(2)
+  id_fuente_procedencia String?                @db.VarChar(36)
+  nivel_cultural        String?                @db.VarChar(50)
+  lugar_graduacion      String?                @db.VarChar(50)
+  fecha_graduacion      DateTime?              @db.Date
+  pais_graduacion       String?                @db.VarChar(50)
+  cat_docente           String?                @db.VarChar(50)
+  cat_cientifica        String?                @db.VarChar(50)
+  master                String?                @db.VarChar(2)
+  gdocientifico         String?                @db.VarChar(20)
+  baja_propuesta        String?                @db.VarChar(2)
+  id_registro_militar   String?                @db.VarChar(36)
+  defensa               String?                @db.VarChar(30)
+  imagen                Bytes?
+  imagen_nombre         String?                @db.VarChar(30)
+  nom_cargomilitar      nom_cargomilitar?      @relation(fields: [id_cargo_militar], references: [id_cargo_militar])
+  nom_especialidad      nom_especialidad?      @relation(fields: [id_especialidad], references: [id_especialidad])
+  nom_fuenteprocedencia nom_fuenteprocedencia? @relation(fields: [id_fuente_procedencia], references: [id_fuente_procedencia])
+  nom_gradomilitar      nom_gradomilitar?      @relation(fields: [id_grado_militar], references: [id_grado_militar])
+  nom_registromilitar   nom_registromilitar?   @relation(fields: [id_registro_militar], references: [id_registro_militar])
+  dat_condecoracion     dat_condecoracion[]
+  dat_contrato          dat_contrato[]
+  his_contrato          his_contrato[]
+}
+
+model dat_puesto {
+  id_puesto    String         @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  id_area      String?        @db.VarChar(36)
+  id_cargo     String?        @db.VarChar(36)
+  plantilla    String?        @db.VarChar(2)
+  directo      String?        @db.VarChar(2)
+  uso          String?        @db.VarChar(36)
+  dat_area     dat_area?      @relation(fields: [id_area], references: [id_area])
+  nom_cargo    nom_cargo?     @relation(fields: [id_cargo], references: [id_cargo])
+  dat_contrato dat_contrato[]
+}
+
+model his_baja {
+  id_baja           String           @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  id_area           String?          @db.VarChar(36)
+  nomb_area         String?          @db.VarChar(50)
+  id_motivo_baja    String?          @db.VarChar(36)
+  nomb_motivo_baja  String?          @db.VarChar(50)
+  id_destino_baja   String?          @db.VarChar(36)
+  nomb_destino_baja String?          @db.VarChar(50)
+  numero_persona    Decimal?         @db.Decimal(4, 0)
+  ci                String?          @db.VarChar(12)
+  nomb_cargo        String?          @db.VarChar(100)
+  nomb_apellidos    String?          @db.VarChar(150)
+  edad              Decimal?         @db.Decimal(2, 0)
+  fecha_alta        DateTime?        @db.Date
+  fecha_baja        DateTime?        @db.Date
+  ano               Decimal?         @db.Decimal(4, 0)
+  mes               Decimal?         @db.Decimal(2, 0)
+  cat_ocup          String?          @db.VarChar(30)
+  nivel_cultural    String?          @db.VarChar(50)
+  nomb_espec        String?          @db.VarChar(100)
+  espec_propia      String?          @db.VarChar(2)
+  directo           String?          @db.VarChar(2)
+  dat_area          dat_area?        @relation(fields: [id_area], references: [id_area])
+  nom_destinobaja   nom_destinobaja? @relation(fields: [id_destino_baja], references: [id_destino_baja])
+  nom_motivobaja    nom_motivobaja?  @relation(fields: [id_motivo_baja], references: [id_motivo_baja])
+}
+
+model his_contrato {
+  id_contrato    String       @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  id_persona     String?      @db.VarChar(36)
+  numero         Decimal?     @db.Decimal(4, 0)
+  ci             String?      @db.VarChar(12)
+  nombre         String?      @db.VarChar(50)
+  apellido1      String?      @db.VarChar(50)
+  apellido2      String?      @db.VarChar(50)
+  tipo           String?      @db.VarChar(50)
+  fecha_alta     DateTime?    @db.Date
+  meses          Decimal?     @db.Decimal(3, 0)
+  nomb_cargo     String?      @db.VarChar(100)
+  nomb_escala    String?      @db.VarChar(5)
+  salario_escala Decimal?     @db.Decimal(7, 2)
+  catego_cup     String?      @db.VarChar(20)
+  pago_perfecc   Decimal?     @db.Decimal(7, 2)
+  fecha_baja     DateTime?    @db.Date
+  nomb_area      String?      @db.VarChar(100)
+  nomb_unidad    String?      @db.VarChar(100)
+  horario        String?      @db.VarChar(100)
+  directo        String?      @db.VarChar(2)
+  sistema_pago   String?      @db.VarChar(30)
+  cla            Decimal?     @db.Decimal(4, 2)
+  otros_pagos    Decimal?     @db.Decimal(7, 2)
+  num_contrato   Decimal?     @db.Decimal(10, 0)
+  dat_persona    dat_persona? @relation(fields: [id_persona], references: [id_persona])
+}
+
+model his_fluctuacion {
+  id_fluctuacion    String    @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  id_area           String?   @db.VarChar(36)
+  nomb_area         String?   @db.VarChar(50)
+  mes               Decimal?  @db.Decimal(2, 0)
+  trimestre         Decimal?  @db.Decimal(1, 0)
+  semestre          Decimal?  @db.Decimal(1, 0)
+  total_bajas       Decimal?  @db.Decimal(8, 0)
+  total_altas       Decimal?  @db.Decimal(8, 0)
+  total_inicio_mes  Decimal?  @db.Decimal(8, 0)
+  total_inicio_trim Decimal?  @db.Decimal(8, 0)
+  total_inicio_ano  Decimal?  @db.Decimal(8, 0)
+  total_inicio_sem  Decimal?  @db.Decimal(8, 0)
+  dat_area          dat_area? @relation(fields: [id_area], references: [id_area])
+}
+
+model nom_cargo {
+  id_cargo        String           @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre          String?          @db.VarChar(100)
+  id_grupo_escala String?          @db.VarChar(36)
+  id_categ_ocup   String?          @db.VarChar(36)
+  pago_perfecc    Decimal?         @db.Decimal(7, 2)
+  cuadro          String?          @db.VarChar(2)
+  calificador     String?          @db.VarChar(100)
+  cuadro_propio   String?          @db.VarChar(2)
+  nom_categocup   nom_categocup?   @relation(fields: [id_categ_ocup], references: [id_categ_ocup])
+  nom_grupoescala nom_grupoescala? @relation(fields: [id_grupo_escala], references: [id_grupo_escala])
+  dat_puesto      dat_puesto[]
+}
+
+model nom_cargomilitar {
+  id_cargo_militar String        @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre           String?       @db.VarChar(100)
+  salario          Decimal?      @db.Decimal(7, 2)
+  dat_persona      dat_persona[]
+}
+
+model nom_categocup {
+  id_categ_ocup String      @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre        String?     @db.VarChar(50)
+  codigo        Decimal?    @db.Decimal(4, 0)
+  nom_cargo     nom_cargo[]
+}
+
+model nom_destinobaja {
+  id_destino_baja String         @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre          String?        @db.VarChar(100)
+  dat_contrato    dat_contrato[]
+  his_baja        his_baja[]
+}
+
+model nom_especialidad {
+  id_especialidad String        @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre          String?       @db.VarChar(100)
+  propia          String?       @db.VarChar(2)
+  afines          String        @default("No") @db.VarChar(2)
+  dat_persona     dat_persona[]
+}
+
+model nom_fuenteprocedencia {
+  id_fuente_procedencia String        @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre                String?       @db.VarChar(50)
+  dat_persona           dat_persona[]
+}
+
+model nom_gradomilitar {
+  id_grado_militar String        @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre           String?       @db.VarChar(100)
+  salario          Decimal?      @db.Decimal(7, 2)
+  dat_persona      dat_persona[]
+}
+
+model nom_grupoescala {
+  id_grupo_escala String      @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre          String?     @db.VarChar(5)
+  salario         Decimal?    @db.Decimal(7, 2)
+  nom_cargo       nom_cargo[]
+}
+
+model nom_motivobaja {
+  id_motivo_baja String         @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  codigo         Decimal?       @unique @db.Decimal(4, 1)
+  nombre         String?        @db.VarChar(100)
+  dat_contrato   dat_contrato[]
+  his_baja       his_baja[]
+}
+
+model nom_registromilitar {
+  id_registro_militar String        @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre              String?       @db.VarChar(50)
+  dat_persona         dat_persona[]
+}
+
+model nom_tipocontrato {
+  id_tipo_contrato      String                  @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre                String?                 @db.VarChar(50)
+  plantilla             String?                 @db.VarChar(2)
+  limitado              String?                 @db.VarChar(2)
+  a_notificar           String?                 @db.VarChar(2)
+  nom_modalidadcontrato nom_modalidadcontrato[]
+}
+
+model rel_usuariounidad {
+  id_usuario String     @db.VarChar(10)
+  id_unidad  String     @db.VarChar(36)
+  dat_unidad dat_unidad @relation(fields: [id_unidad], references: [id_unidad])
+
+  @@id([id_usuario, id_unidad])
+}
+
+model dat_area {
+  id_area         String            @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  codigo          Decimal?          @unique @db.Decimal(4, 0)
+  nombre          String?           @db.VarChar(100)
+  id_unidad       String?           @db.VarChar(36)
+  id_area_sub     String?           @db.VarChar(36)
+  dat_area        dat_area?         @relation("dat_areaTodat_area_id_area_sub", fields: [id_area_sub], references: [id_area])
+  dat_unidad      dat_unidad?       @relation(fields: [id_unidad], references: [id_unidad])
+  other_dat_area  dat_area[]        @relation("dat_areaTodat_area_id_area_sub")
+  dat_puesto      dat_puesto[]
+  his_baja        his_baja[]
+  his_fluctuacion his_fluctuacion[]
+
+  @@unique([codigo, id_unidad], name: "nom_area_idunidad_key")
+}
+
+model dat_contrato {
+  id_contrato           String                @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  fecha_alta            DateTime?             @db.Date
+  id_puesto             String?               @db.VarChar(36)
+  fecha_contrato        DateTime?             @db.Date
+  meses_contrato        Decimal?              @db.Decimal(2, 0)
+  horario_trabajo       String?               @db.VarChar(50)
+  sistema_pago          String?               @db.VarChar(20)
+  cla                   Decimal?              @db.Decimal(7, 2)
+  otros_pagos           Decimal?              @db.Decimal(7, 2)
+  baja_propuesta        String?               @db.VarChar(2)
+  fecha_baja            DateTime?             @db.Date
+  id_motivo_baja        String?               @db.VarChar(36)
+  id_destino_baja       String?               @db.VarChar(36)
+  ubic_lab_excepcional  String?               @db.VarChar(20)
+  familia_en_torre      Decimal?              @db.Decimal(2, 0)
+  cgmrm                 String?               @db.VarChar(2)
+  pagsm                 String?               @db.VarChar(2)
+  ghanav                String?               @db.VarChar(2)
+  buque                 String?               @db.VarChar(2)
+  num_contrato          Decimal?              @db.Decimal(10, 0)
+  id_tipo_modalidad     String                @db.VarChar(36)
+  cuadro_designacion    String?               @db.VarChar(2)
+  id_forma_pago         String?               @db.VarChar(36)
+  id_persona            String                @db.VarChar(36)
+  nom_destinobaja       nom_destinobaja?      @relation(fields: [id_destino_baja], references: [id_destino_baja])
+  nom_formapago         nom_formapago?        @relation(fields: [id_forma_pago], references: [id_forma_pago])
+  nom_motivobaja        nom_motivobaja?       @relation(fields: [id_motivo_baja], references: [id_motivo_baja])
+  dat_persona           dat_persona           @relation(fields: [id_persona], references: [id_persona])
+  dat_puesto            dat_puesto?           @relation(fields: [id_puesto], references: [id_puesto])
+  nom_modalidadcontrato nom_modalidadcontrato @relation(fields: [id_tipo_modalidad], references: [id_modalidad])
+}
+
+model dat_unidad {
+  id_unidad         String              @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre            String?             @db.VarChar(100)
+  codigo            Decimal?            @unique @db.Decimal(4, 0)
+  id_unidad_sub     String?             @db.VarChar(36)
+  fuera_provincia   String              @default("No") @db.VarChar(2)
+  nomb_pers_aut     String?             @db.VarChar(150)
+  cargo_pers_aut    String?             @db.VarChar(100)
+  dat_unidad        dat_unidad?         @relation("dat_unidadTodat_unidad_id_unidad_sub", fields: [id_unidad_sub], references: [id_unidad])
+  dat_area          dat_area[]
+  other_dat_unidad  dat_unidad[]        @relation("dat_unidadTodat_unidad_id_unidad_sub")
+  rel_usuariounidad rel_usuariounidad[]
+}
+
+model nom_formapago {
+  id_forma_pago String         @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre        String         @db.VarChar(36)
+  tipo          String         @db.VarChar(36)
+  dat_contrato  dat_contrato[]
+}
+
+model nom_modalidadcontrato {
+  id_modalidad     String           @id @default(dbgenerated("f_nuevouuid()")) @db.VarChar(36)
+  nombre           String           @db.VarChar(36)
+  id_tipo_contrato String           @db.VarChar(36)
+  nom_tipocontrato nom_tipocontrato @relation(fields: [id_tipo_contrato], references: [id_tipo_contrato])
+  dat_contrato     dat_contrato[]
+}
